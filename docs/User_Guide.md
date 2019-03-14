@@ -1,4 +1,5 @@
 
+
 # StrongKey FIDO2 Server User Guide
 ## Contents
 
@@ -60,36 +61,37 @@ For the adventurous who want to explore alternate configurations of the FIDO2 Se
 ### Options with StrongKey FIDO2 Server 
 
 #### Policies and Their Use
+The FIDO2 policy JSON file governs the server's behavior with regard to cryptography, registration, authentication, and additional functionality in the form of WebAuthn extensions and Metadata Service (MDS).
 
-StrongKey installs a default FIDO2 policy with the StrongKey FIDO2 Server in JSON format, encoded using base64urlsafe in the _install-skfs.sh_ script in _/usr/local/strongkey_. The default policy is configured to approve all signature types, but may use any subset of the available attributes. The options provided in the following table allow the methods used to be tailored to your FIDO2 server's needs. Where appropriate, links have been provided to the various specifications governing each item's use:
+StrongKey installs a FIDO2 policy with the StrongKey FIDO2 Server, encoded using base64urlsafe, in the _install-skfs.sh_ script in _/usr/local/strongkey_. The installed policy is configured to approve all signature types, but may use any subset of the available attributes. The options provided in the following table allow the methods used to be tailored to your FIDO2 server's needs.
 
-Policy Attribute(s) | Accepted Value(s) &mdash; [...] indicates multiples can be chosen  |  More Information 
+Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...] indicates Multiple Choice  |  Usage Notes
   :---  |  :---  |  :--
-| "cryptography":  |  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_formats":  |  ["fido-u2f", "packed", "tpm", "android-key", "android-safetynet", "none"] |  [WebAuthn Attestation Statement Formats](https://w3c.github.io/webauthn/#defined-attestation-formats)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"elliptic_curves":  |  ["secp256r1", "secp384r1", "secp521r1", "curve25519"] | SEC 2: Recommended Elliptic Curve Domain Parameters [pages 9-11](http://www.secg.org/sec2-v2.pdf), and [This article](https://en.wikipedia.org/wiki/Curve25519) on curve25519
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_rsa_signatures":  |  ["rsassa-pkcs1-v1_5-sha1", "rsassa-pkcs1-v1_5-sha256", "rsassa-pkcs1-v1_5-sha384", "rsassa-pkcs1-v1_5-sha512", "rsassa-pss-sha256", "rsassa-pss-sha384", "rsassa-pss-sha512"]  |  Internet Engineering Task Force (IETF) # PKCS #1: RSA Cryptography Specifications Version 2.2 [pages 32-39](https://tools.ietf.org/html/rfc8017#page-32) and [pages 60-62](https://tools.ietf.org/html/rfc8017#page-60))
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_ec_signatures":  |  ["ecdsa-p256-sha256", "ecdsa-p384-sha384", "ecdsa-p521-sha512", "eddsa", "ecdsa-p256k-sha256"]  |  [Elliptic Curve Digital Signature Algorithm (ECDSA)](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm) and [Edwards-curve Digital Signature Algorithm (EdDSA)](https://en.wikipedia.org/wiki/EdDSA)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_types":  |  ["basic", "self", "attca", "ecdaa", "none"]  |  [Attestation Types](https://w3c.github.io/webauthn/#sctn-attestation-types) and [WebAuthn Considerations for Self and None Attestation Types and Ignoring Attestation](https://w3c.github.io/webauthn/#sctn-no-attestation-security-attestation)
-"registration":  |
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation":  |  ["none", "indirect", "direct"]  |  [Direct Anonymous Attestation](https://en.wikipedia.org/wiki/Direct_Anonymous_Attestation)
+| "cryptography":  |  |  Governs behavior of attestation, Elliptic Curves, and signatures. EC tends to be faster and smaller than RSA, but is more complicated to implement. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_formats":  |  **Supported Attestation Types by Format**<br>"fido-u2f": _Basic, AttCA_<br>"packed": _Basic, Self, AttCA, ECDAA_<br>"tpm": _AttCA, ECDAA_<br>"android-key": _Basic_<br>"android-safetynet": _Basic_<br>"none": _None_ <br>|  Choices for "attestation types" (below) depend on the format chosen here. RP applications and servers determine acceptable attestation types by these policy parameters.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"elliptic_curves":  |  ["secp256r1", "secp384r1", "secp521r1", "curve25519"] |  EC protocols cannot use RSA keys and vice versa, but can co-exist on the same server, allowing the server to handle both.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_rsa_signatures":  |  ["rsassa-pkcs1-v1_5-sha1", "rsassa-pkcs1-v1_5-sha256", "rsassa-pkcs1-v1_5-sha384", "rsassa-pkcs1-v1_5-sha512", "rsassa-pss-sha256", "rsassa-pss-sha384", "rsassa-pss-sha512"]  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_ec_signatures":  |  ["ecdsa-p256-sha256", "ecdsa-p384-sha384", "ecdsa-p521-sha512", "eddsa", "ecdsa-p256k-sha256"]  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_types":  |  ["basic", "self", "attca", "ecdaa", "none"]  |  Determined by which "attestation_format" (see above) is chosen.
+"registration":  |  | Governs registration behavior.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation":  |  ["none", "indirect", "direct"]  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"displayName":  |  ["required", "preferred"]  |  Because everyone needs a display name...
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorSelection":  |  |  [WebAuthn Authenticator Selection Criteria](https://w3c.github.io/webauthn/#dictdef-authenticatorselectioncriteria)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorAttachment":  |  ["platform", "cross-platform"]&dagger;  |  [WebAuthn Authenticator Taxonomy](https://w3c.github.io/webauthn/#sctn-authenticator-taxonomy)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", "preferred", "discouraged"]&dagger;  |  [WebAuthn Authenticator Selection Criteria](https://w3c.github.io/webauthn/#dictdef-authenticatorselectioncriteria)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireResidentKey":  |  [true, false] (**can be both&dagger;**)  |  [WebAuthn Authenticator Selection Criteria](https://w3c.github.io/webauthn/#dictdef-authenticatorselectioncriteria)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"excludeCredentials":  |  "enabled" or "disabled" | [WC3 Definition](https://w3c.github.io/webauthn/#dom-publickeycredentialcreationoptions-excludecredentials)
-"authentication":  |
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", "preferred", "discouraged"]&Dagger;  |  [Authenticator Selection Criteria](https://w3c.github.io/webauthn/#dictdef-authenticatorselectioncriteria)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowCredentials":  |  "enabled" or "disabled"  |  [W3C Definition](https://w3c.github.io/webauthn/#dom-publickeycredentialrequestoptions-allowcredentials)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorSelection":  |  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorAttachment":  |  ["platform", "cross-platform"]&dagger;  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", "preferred", "discouraged"]&dagger;  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireResidentKey":  |  [true, false] (**can be both&dagger;**)  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"excludeCredentials":  |  "enabled" or "disabled" | 
+"authentication":  |  | Governs registration behavior.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", "preferred", "discouraged"]&Dagger;  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowCredentials":  |  "enabled" or "disabled"  |  
 "rp":  |
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":  |  "demo.strongauth.com:8181"
-"counter": |  |  [WebAuthn Signature Counter Considerations](https://w3c.github.io/webauthn/#signature-counter)
+"counter": |  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireIncrease":  |  true or false
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireCounter":  |  true or false
-"storeSignatures": | true or false |
-"extensions": |  | [WebAuthn Extensions](https://w3c.github.io/webauthn/#extensions)
-| "mds":  |  | Used to add a [MetaData Service (MDS)](https://fidoalliance.org/metadata/) endpoint
+"storeSignatures":  | true or false |
+"extensions": |  |  Governs extension behavior.
+| "mds":  |  | 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoints":  | 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":    |  ["https://mds2.fidoalliance.org"]
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"token":  |  <Get from [https://mds2.fidoalliance.org/tokens/](https://mds2.fidoalliance.org/tokens/)> 
@@ -99,7 +101,22 @@ Policy Attribute(s) | Accepted Value(s) &mdash; [...] indicates multiples can be
 
 &Dagger;&mdash;These fields specify acceptable values the RP web application may request during _/fidokeys/authentication/challenge_.
 
-The included default policy enables all supported configuration choices for StrongKey FIDO2 Server; use any or all of them as needed. **Prior to installation**, search the _install-skfs.sh_ file contents for "Default Policy" and decode the encoded text entry from there, or copy and paste from the example JSON below. When changes have been made, save it, re-encode it using base64urlsafe, then replace it in the script.
+Specification details and definitions for the above parameters can be found in the following links:
+*  [Web Authentication: An API for accessing Public Key Credentials - Level 2](https://w3c.github.io/webauthn/)
+*  Internet Engineering Task Force (IETF) PKCS #1: RSA Cryptography Specifications Version 2.2 [pages 32-39](https://tools.ietf.org/html/rfc8017#page-32) and [pages 60-62](https://tools.ietf.org/html/rfc8017#page-60)
+*  [Elliptic Curve Digital Signature Algorithm (ECDSA)](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)
+*  [Edwards-curve Digital Signature Algorithm (EdDSA)](https://en.wikipedia.org/wiki/EdDSA)
+*  [Direct Anonymous Attestation](https://en.wikipedia.org/wiki/Direct_Anonymous_Attestation)
+*  [Authenticator Selection Criteria](https://w3c.github.io/webauthn/#dictdef-authenticatorselectioncriteria)
+*  [MetaData Service (MDS)](https://fidoalliance.org/metadata/)
+
+The included default policy enables all supported configuration choices for StrongKey FIDO2 Server; use any or all of them as needed. View the JSON content below; or if you would like to decode it on your own, follow these instructions:
+1. Search the _install-skfs.sh_ file contents for "Default Policy."
+2. Copy the encoded text entry from there and [decode it using the base64urlsafe](https://www.google.com/search?q=base64urlsafe+decoder) algorithm.
+3. Edit the file, making changes according to the options in table above.
+4. If changes have been made, save it as a text file.
+5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)), then replace it in the script.
+6. Save _install-skfs.sh_.
 ~~~~
 {
 	"storeSignatures": false,
