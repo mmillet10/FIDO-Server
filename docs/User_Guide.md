@@ -37,7 +37,7 @@ These calls uniquely register a user, and are required before any other calls ca
 - **/fidokeys**: This call submits a signed challenge (nonce) from the Authenticator to the FIDO2 Server via an RP web application, after which registration is complete and the user may log in. Upon success, the FIDO2 Authenticator public key is stored in the _skfs_ database.
   - [RP web application source: Register a new user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L119-L154)
   - [RP web application source: Adding authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L156-L185)
-  - [WebAuthn client source: pass RP challnege](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js#L298-L322)
+  - [WebAuthn client source: pass RP challenge](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js#L298-L322)
 
 **NOTE**: Registering additional Authenticators to an existing user makes use of the same REST APIs as when used for first-time registration, but the logic must be adjusted accordingly.
 
