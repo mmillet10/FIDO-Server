@@ -15,18 +15,28 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name = "fido_policies")
+@Table(name = "fido_policies", 
+        uniqueConstraints = {
+            @UniqueConstraint(columnNames = {"did", "start_date"}),
+            @UniqueConstraint(columnNames = {"did", "certificate_profile_name"})   
+        },
+        indexes = {
+            @Index(columnList = "did,start_date"),
+            @Index(columnList = "did,certificate_profile_name")
+        })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FidoPolicies.findAll", query = "SELECT f FROM FidoPolicies f"),
@@ -43,7 +53,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "FidoPolicies.findByCreateDate", query = "SELECT f FROM FidoPolicies f WHERE f.createDate = :createDate"),
     @NamedQuery(name = "FidoPolicies.findByModifyDate", query = "SELECT f FROM FidoPolicies f WHERE f.modifyDate = :modifyDate"),
     @NamedQuery(name = "FidoPolicies.maxpid", query = "SELECT max(f.fidoPoliciesPK.pid) FROM FidoPolicies f where f.fidoPoliciesPK.sid = :sid"),
-    @NamedQuery(name = "FidoPolicies.findBySignature", query = "SELECT f FROM FidoPolicies f WHERE f.signature = :signature")})
+    @NamedQuery(name = "FidoPolicies.findBySignature", query = "SELECT f FROM FidoPolicies f WHERE f.signature = :signature"),
+    @NamedQuery(name = "FidoPolicies.count", query = "SELECT count(f) FROM FidoPolicies f")})
 public class FidoPolicies implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,7 +71,7 @@ public class FidoPolicies implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
-    @Column(name = "certificate_profile_name")
+    @Column(name = "certificate_profile_name", length = 64)
     private String certificateProfileName;
     @Basic(optional = false)
     @NotNull
@@ -78,7 +89,7 @@ public class FidoPolicies implements Serializable {
     @Column(name = "status")
     private String status;
     @Size(max = 512)
-    @Column(name = "notes")
+    @Column(name = "notes", length = 512)
     private String notes;
     @Basic(optional = false)
     @NotNull
@@ -89,7 +100,7 @@ public class FidoPolicies implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifyDate;
     @Size(max = 2048)
-    @Column(name = "signature")
+    @Column(name = "signature", length = 2048)
     private String signature;
 
     public FidoPolicies() {

@@ -22,6 +22,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,7 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 @Entity
-@Table(name = "fido_keys")
+@Table(name = "fido_keys",
+        indexes = {@Index(columnList = "sid,did,username,fkid")})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FidoKeys.findAll", query = "SELECT f FROM FidoKeys f"),
@@ -76,21 +78,21 @@ public class FidoKeys implements Serializable {
     @EmbeddedId
     protected FidoKeysPK fidoKeysPK;
     @Size(max = 128)
-    @Column(name = "userid")
+    @Column(name = "userid", length = 128)
     private String userid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 512)
-    @Column(name = "keyhandle")
+    @Column(name = "keyhandle", length = 512)
     private String keyhandle;
     @Size(max = 512)
-    @Column(name = "appid")
+    @Column(name = "appid", length = 512)
     private String appid;
     @Size(max = 512)
-    @Column(name = "publickey")
+    @Column(name = "publickey", length = 512)
     private String publickey;
     @Size(max = 512)
-    @Column(name = "khdigest")
+    @Column(name = "khdigest", length = 512)
     private String khdigest;
     @Size(max = 7)
     @Column(name = "khdigest_type")
@@ -108,13 +110,13 @@ public class FidoKeys implements Serializable {
     @Column(name = "counter")
     private int counter;
     @Size(max = 45)
-    @Column(name = "fido_version")
+    @Column(name = "fido_version", length = 45)
     private String fidoVersion;
     @Size(max = 7)
     @Column(name = "fido_protocol")
     private String fidoProtocol;
     @Size(max = 36)
-    @Column(name = "aaguid")
+    @Column(name = "aaguid", length = 36)
     private String aaguid;
     @Lob
     @Size(max = 2147483647)
@@ -130,13 +132,13 @@ public class FidoKeys implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
-    @Column(name = "create_location")
+    @Column(name = "create_location", length = 256)
     private String createLocation;
     @Column(name = "modify_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifyDate;
     @Size(max = 256)
-    @Column(name = "modify_location")
+    @Column(name = "modify_location", length = 256)
     private String modifyLocation;
     @Basic(optional = false)
     @NotNull
@@ -144,7 +146,7 @@ public class FidoKeys implements Serializable {
     @Column(name = "status")
     private String status;
     @Size(max = 2048)
-    @Column(name = "signature")
+    @Column(name = "signature", length = 2048)
     private String signature;
 
     @Transient

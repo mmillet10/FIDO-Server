@@ -48,7 +48,7 @@ public class FidoUsers implements Serializable {
     @EmbeddedId
     protected FidoUsersPK fidoUsersPK;
     @Size(max = 2048)
-    @Column(name = "userdn")
+    @Column(name = "userdn", length = 2048)
     private String userdn;
     @Size(max = 5)
     @Column(name = "fido_keys_enabled")
@@ -57,16 +57,16 @@ public class FidoUsers implements Serializable {
     @Column(name = "two_step_verification")
     private String twoStepVerification;
     @Size(max = 256)
-    @Column(name = "primary_email")
+    @Column(name = "primary_email", length = 256)
     private String primaryEmail;
     @Size(max = 2048)
-    @Column(name = "registered_emails")
+    @Column(name = "registered_emails", length = 2048)
     private String registeredEmails;
     @Size(max = 32)
-    @Column(name = "primary_phone_number")
+    @Column(name = "primary_phone_number", length = 32)
     private String primaryPhoneNumber;
     @Size(max = 2048)
-    @Column(name = "registered_phone_numbers")
+    @Column(name = "registered_phone_numbers", length = 2048)
     private String registeredPhoneNumbers;
     @Size(max = 6)
     @Column(name = "two_step_target")
@@ -77,7 +77,7 @@ public class FidoUsers implements Serializable {
     @Column(name = "status")
     private String status;
     @Size(max = 2048)
-    @Column(name = "signature")
+    @Column(name = "signature", length = 2048)
     private String signature;
 
     @Transient

@@ -16,6 +16,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -40,7 +41,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "servers", uniqueConstraints = {@UniqueConstraint(columnNames = {"did", "sid", "pseudo_number"}),
                          @UniqueConstraint(columnNames = {"did", "sid", "fqdn"})
-})
+}, indexes = {@Index(columnList = "sid,fqdn")})
 @NamedQueries({
     @NamedQuery(name = "Servers.findAll", query = "SELECT s FROM Servers s"),
     @NamedQuery(name = "Servers.findByActiveSubscribers", query = "SELECT s FROM Servers s WHERE s.fqdn <> :fqdn and s.status = 'Active' and "

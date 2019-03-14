@@ -10,6 +10,10 @@
     <class>com.strongkey.skfs.entitybeans.AttestationCertificates</class>
     <class>com.strongkey.skfs.entitybeans.FidoPolicies</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <properties>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
+      <property name="javax.persistence.schema-generation.scripts.create-target" value="/${project.build.directory}/create-script.sql"/>
+    </properties>
   </persistence-unit>
 </persistence>

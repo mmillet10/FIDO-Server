@@ -29,7 +29,7 @@ public class FidoUsersPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 256)
-    @Column(name = "username")
+    @Column(name = "username", length = 256)
     private String username;
 
     public FidoUsersPK() {
