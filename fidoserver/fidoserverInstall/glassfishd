@@ -23,6 +23,7 @@ start () {
 
 	# start daemon
 	daemon $PROGRAM start-domain
+	daemon $PROGRAM start-database
         RETVAL=$?
 	echo
 	[ $RETVAL = 0 ] && touch /var/lock/subsys/glassfishd
@@ -33,6 +34,7 @@ stop () {
 	# stop daemon
 	echo -n $"Stopping $prog: "
 	daemon $PROGRAM stop-domain
+	daemon $PROGRAM stop-database
 	RETVAL=$?
 	echo
 	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/glassfishd
