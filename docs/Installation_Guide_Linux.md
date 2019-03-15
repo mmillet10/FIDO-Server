@@ -76,8 +76,6 @@
 
 To uninstall StrongKey FIDO2 Server, run the following command from the folder where the distribution was extracted:
 
-    ```
     sudo ./cleanup.sh
-    ```
-
+    
 This removes all StrongKey files plus the installed dependency packages. If you've installed the sample Relying Party web application and the StrongKey WebAuthn client, they will be removed as well.
