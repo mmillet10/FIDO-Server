@@ -73,7 +73,7 @@ StrongKey installs a FIDO2 policy with the StrongKey FIDO2 Server, encoded using
 
 Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice, Bold = Default  |  Usage Notes
   :---  |  :---  |  :--
-| "cryptography":  |  |  Governs behavior of attestation, Elliptic Curves, and signatures. EC tends to be faster and smaller than RSA, but is more complicated to implement. 
+| "cryptography":  |2  Governs behavior of attestation, Elliptic Curves, and signatures. EC tends to be faster and smaller than RSA, but is more complicated to implement. 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_formats":  |  ["fido-u2f, "packed", "tpm", "android-key", "android-safetynet", "none"]<br><br>**Supported Attestation Types by Format**<br>"fido-u2f": _basic, attca_<br>"packed": _basic, self, attca, ecdaa_<br>"tpm": _attca, ecdaa_<br>"android-key": _basic_<br>"android-safetynet": _basic_<br>"none": _none_ <br>|  Choices for "attestation types" (below) depend on the format chosen here. RP applications and servers determine acceptable attestation types by these policy parameters.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"elliptic_curves":  |  ["secp256r1", "secp384r1", "secp521r1", "curve25519"] |  EC protocols cannot use RSA keys and vice versa, but can co-exist on the same server, allowing the server to handle both.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_rsa_signatures":  |  ["rsassa-pkcs1-v1_5-sha1", "rsassa-pkcs1-v1_5-sha256", "rsassa-pkcs1-v1_5-sha384", "rsassa-pkcs1-v1_5-sha512", "rsassa-pss-sha256", "rsassa-pss-sha384", "rsassa-pss-sha512"]  |  
