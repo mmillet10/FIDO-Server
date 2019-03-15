@@ -80,8 +80,7 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...] 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_ec_signatures":  |  ["ecdsa-p256-sha256", "ecdsa-p384-sha384", "ecdsa-p521-sha512", "eddsa", "ecdsa-p256k-sha256"]  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_types":  |  ["basic", "self", "attca", "ecdaa", "none"]  |  Determined by which "attestation_format" (see above) is chosen.
 "registration":  |  | Governs registration behavior.
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation":  |  [**"none"**, "indirect", "direct"]<br><br>"none": Attestation statement does not matter to the RP web application.<br>"direct": RP web application uses attestation from the Authenticator.<br>"indirect": Client determines attestation statement; source may vary.
-|  Determines how the attestation i
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation":  |  [**"none"**, "indirect", "direct"]<br><br>"none": Attestation statement does not matter to the RP web application.<br>"direct": RP web application uses attestation from the Authenticator.<br>"indirect": Client determines attestation statement; source may vary.  |  Determines acceptable sources from which the RP web application will receive the attestation statement (q.v. "attestation format").
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"displayName":  |  ["required", "preferred"]  |  Because everyone needs a display name...
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorSelection":  |  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorAttachment":  |  ["platform", "cross-platform"]&dagger;  |  
