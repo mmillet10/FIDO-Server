@@ -54,7 +54,7 @@ Admin calls are designed for managing registered Authenticators. **{kid}** is th
   - [RP web application source: list Authenticators for a given user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L328-L356)
 - **/fidokeys/{kid} (PATCH)**: Updates a registered Authenticator's status (_Active_ or _Inactive_).
 - **/fidokeys/{kid} (DELETE)**: Deletes a registered Authenticator. Note that deleting all Authenticators from a user (including yourself) will prevent further logins for that user. If this occurs, either the orphaned user will need to be deleted and re-registered or, if you have built it into your application, a means must be made available for re-registering an Authenticator to the user without logging the user out.
-  -   - [RP web application source: delete Authenticators from an account](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L358-L404)
+  - [RP web application source: delete Authenticators from an account](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L358-L404)
 
 ## Alternate Configurations
 StrongKey FIDO2 Server has only been tested using MariaDB (+JDBC), Payara, and Open JDK, but may work with other dependency applications. Following is a list of the component parts needed for StrongKey FIDO2 Server to function. All of the components may be installed on the same server, whether physical or virtual.
