@@ -47,7 +47,7 @@ Authenticate a user using FIDO2 protocols. These calls mirror the registration c
  - [RP web application source: Challenge for authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L187-L215)
    - [WebAuthn client source: pass RP challenge response to API](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js#L298-L322)
 - **/fidokeys/authentication**: This call submits a signed challenge (nonce) from the Authenticator to the FIDO2 Server via RP web application, after which authentication is complete and the user is logged in.
-  -  - [RP web application source: Challenge for authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L187-L215)
+  -  - [RP web application source: Challenge for authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L217-L247)
 
 ### Administration
 Admin calls are designed for managing registered Authenticators. **{kid}** is the unique ID of the Authenticator being manipulated. These calls require a user to be registered with at least one Authenticator, but not necessarily logged in (authenticated).
