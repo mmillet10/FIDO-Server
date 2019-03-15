@@ -101,7 +101,7 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoints":  | 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":    |  ["https://mds2.fidoalliance.org"]
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"token":  |  <Get from [https://mds2.fidoalliance.org/tokens/](https://mds2.fidoalliance.org/tokens/)> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"certification":  |  ["FIDO_CERTIFIED", "NOT_FIDO_CERTIFIED", "USER_VERIFICATION_BYPASS", "ATTESTATION_KEY_COMPROMISE", "USER_KEY_REMOTE_COMPROMISE", "USER_KEY_PHYSICAL_COMPROMISE", "UPDATE_AVAILABLE", "REVOKED", "SELF_ASSERTION_SUBMITTED", "FIDO_CERTIFIED_L1", "FIDO_CERTIFIED_L1plus", "FIDO_CERTIFIED_L2", "FIDO_CERTIFIED_L2plus", "FIDO_CERTIFIED_L3", "FIDO_CERTIFIED_L3plus"]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"certification":  |  ["FIDO_CERTIFIED", "NOT_FIDO_CERTIFIED", "USER_VERIFICATION_BYPASS", "ATTESTATION_KEY_COMPROMISE", "USER_KEY_REMOTE_COMPROMISE", "USER_KEY_PHYSICAL_COMPROMISE", "UPDATE_AVAILABLE", "REVOKED", "SELF_ASSERTION_SUBMITTED", "FIDO_CERTIFIED_L1", "FIDO_CERTIFIED_L1plus", "FIDO_CERTIFIED_L2", "FIDO_CERTIFIED_L2plus", "FIDO_CERTIFIED_L3", "FIDO_CERTIFIED_L3plus"]  |  [FIDO Metadata Service (MDS) AuthenticatorStatus enum](https://fidoalliance.org/specs/fido-v2.0-id-20180227/fido-metadata-service-v2.0-id-20180227.html#authenticatorstatus-enum)
 
 &dagger;&mdash;These fields specify acceptable values the RP web application may request during _/fidokeys/registration/challenge_.
 
