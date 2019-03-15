@@ -91,7 +91,7 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", **"preferred"**, "discouraged"]&Dagger;<br><br>"required": The RP web application will fail without the uV flag.<br>"preferred": The RP web application prefers a uV flag, but will not fail without one.<br>"discouraged": The RP web application does not want user verification.  |  Describes the RP web application's requirements regarding user verification for the get() operation.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowCredentials":  |  "enabled" or **"disabled"** | Contains a list of public key credentials acceptable to the caller, in order of preference.
 "rp":  |  | Identifies the Relying Party server on whose behalf a given registration or authentication ceremony is being performed.
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":  |  "demo.strongauth.com:8181"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":  |  "demo.strongauth.com:8181"  | Must be a valid domain name, and may include ports.
 "counter": |  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireIncrease":  |  true or false
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireCounter":  |  true or false
