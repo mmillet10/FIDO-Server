@@ -25,11 +25,11 @@ servers:
   - url: '/api/domains/{did}'
 tags:
   - name: Registration
-    description: Register a user and their FIDO key using FIDO2 protocols.
+    description: Register a user and their FIDO authenticator using FIDO2 protocols.
   - name: Authentication
     description: Authenticate a user using FIDO2 protocols.
   - name: Administration
-    description: Management API for registered FIDO keys.
+    description: Management API for registered FIDO authenticators.
 paths:
   /fidokeys/registration/challenge:
     post:
@@ -174,7 +174,7 @@ paths:
           $ref: '#/components/responses/ServerError'
   /fidokeys:
     get:
-      summary: Get all keys associated with a registered user.
+      summary: Get all authenticators associated with a registered user.
       description: |
         This method returns a list of user-registered FIDO authenticator metadata: the place and time from which it was registered and used (last modified).
       tags:
@@ -193,7 +193,7 @@ paths:
           schema:
             type: string
           required: true
-          description: String username for which to retrieve keyinfo.
+          description: String username for which to retrieve authenticator info.
           example: user.name@domain.com
         - in: header
           name: Date
@@ -361,9 +361,9 @@ paths:
           $ref: '#/components/responses/ServerError'
   /fidokeys/{kid}:
     patch:
-      summary: Updates a registered key's status.
+      summary: Updates a registered authenticator's status.
       description: |
-        This method changes the status of a specific user-registered key stored in persistent storage. The FIDO protocol as such does not specify any activation/deactivation process. This method just changes the user-registered FIDO authenticator information to bear a new status in the persistent storage so it can be used for FIDO authentication. To identify which key must be activated&mdash;since the user could have registered multiple FIDO authenticators&mdash;a key ID is passed. This key ID for every registered FIDO authenticator can be obtained by making the *getkeysinfo* call, which will return an array of registered key metadata with each entry mapped to a key ID. Client applications have to cache these key IDs if they wish to deactivate, activate, or deregister keys.
+        This method changes the status of a specific user-registered authenticator stored in persistent storage. The FIDO protocol as such does not specify any activation/deactivation process. This method just changes the user-registered FIDO authenticator information to bear a new status in the persistent storage so it can be used for FIDO authentication. To identify which authenticator must be activated&mdash;since the user could have registered multiple FIDO authenticators&mdash;a key ID is passed. This key ID for every registered FIDO authenticator can be obtained by making the *getkeysinfo* call, which will return an array of registered authenticator metadata with each entry mapped to a key ID. Client applications have to cache these key IDs if they wish to deactivate, activate, or deregister authenticators.
       tags:
         - Administration
       operationId: patchkey
@@ -380,7 +380,7 @@ paths:
           schema:
             type: string
           required: true
-          description: String ID of the key to patch.
+          description: String ID of the authenticator to patch.
           example: "1-1-username-1"
         - in: header
           name: strongkey-content-sha256
@@ -438,7 +438,7 @@ paths:
     delete:
       summary: Delete a registered key.
       description: |
-        The process of deleting or de-registering an already-registered FIDO authenticator. The inputs needed are the username and the random ID to point to a unique registered key for that user. This random ID can be obtained by calling the *getkeysinfo* method.
+        The process of deleting or de-registering an already-registered FIDO authenticator. The inputs needed are the username and the random ID to point to a unique registered authenticator for that user. This random ID can be obtained by calling the *getkeysinfo* method.
       tags:
         - Administration
       operationId: deregister
@@ -455,7 +455,7 @@ paths:
           schema:
             type: string
           required: true
-          description: String ID of the key to patch.
+          description: String ID of the authenticator to patch.
           example: "1-1-username-1"
         - in: header
           name: Date
@@ -514,12 +514,12 @@ components:
       type: object
       example: {}
     username:
-      description: The username associated with or to be associated with the FIDO key.
+      description: The username associated with or to be associated with the FIDO authenticator.
       type: string
       maxLength: 256
       example: user.name@domain.com
     displayname:
-      description: The display name associated with or to be associated with the FIDO key.
+      description: The display name associated with or to be associated with the FIDO authenticator.
       type: string
       maxLength: 256
       example: User Name
@@ -527,7 +527,7 @@ components:
       description: Location metadata that can be stored during web service calls.
       type: string
     status:
-      description: The status of a registered FIDO key.
+      description: The status of a registered FIDO authenticator.
       type: string
       enum: 
         - "Active"
@@ -574,7 +574,7 @@ components:
       in: header
       name: Authorization
       description: | 
-              The type and value of the authentication to present to the server. The currently supported mechanism is HMAC Auth which requires an access key and secret key. The secret key must be used to create an HMAC-SHA256 hash over the request in the form of\:
+              The type and value of the authentication to present to the server. The currently supported mechanism is HMAC Auth, which requires an access key and secret key. The secret key must be used to create an HMAC-SHA256 hash over the request in the form of\:
                 + http verb + "\n"             (ex POST)
                 + content SHA-256 + "\n"       (ex RDk2y8UcpVXsnFmyo6TzRpJxbszectFj8zR3bFdDjyY=)
                 + content type + "\n"          (ex application/json)
