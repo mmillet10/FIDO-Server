@@ -71,7 +71,7 @@ The FIDO2 policy JSON file governs the server's behavior with regard to cryptogr
 
 StrongKey installs a FIDO2 policy with the StrongKey FIDO2 Server, encoded using base64urlsafe, in the _install-skfs.sh_ script in _/usr/local/strongkey_. The installed policy is configured to approve all signature types, but may use any subset of the available attributes. The options provided in the following table allow the methods used to be tailored to your FIDO2 server's needs.
 
-Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...] = Multiple Choice, **Bold** = Default  |  Usage Notes
+Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice, Bold = Default  |  Usage Notes
   :---  |  :---  |  :--
 | "cryptography":  |  |  Governs behavior of attestation, Elliptic Curves, and signatures. EC tends to be faster and smaller than RSA, but is more complicated to implement. 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_formats":  |  ["fido-u2f, "packed", "tpm", "android-key", "android-safetynet", "none"]<br><br>**Supported Attestation Types by Format**<br>"fido-u2f": _basic, attca_<br>"packed": _basic, self, attca, ecdaa_<br>"tpm": _attca, ecdaa_<br>"android-key": _basic_<br>"android-safetynet": _basic_<br>"none": _none_ <br>|  Choices for "attestation types" (below) depend on the format chosen here. RP applications and servers determine acceptable attestation types by these policy parameters.
