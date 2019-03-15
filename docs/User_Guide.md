@@ -44,7 +44,9 @@ These calls uniquely register a user, and are required before any other calls ca
 ### Authentication
 Authenticate a user using FIDO2 protocols. These calls mirror the registration calls in function. A user must be registered with at least one key before authentication calls can be made. In these calls the user and their client (containing at least one Authenticator) work together to cryptographically prove to an RP web application that the user controls the credential private key associated with a previously-registered public key credential (see Registration, above). This requires a test of user presence or user verification, and will occur with every login attempt.
 - **/fidokeys/authentication/challenge**: Obtains a single-use, cryptographically strong random number (nonce) from the FIDO2 Server via the RP web application. From the FIDO2 Server the nonce is then sent to the Authenticator for signing.
+ - [RP web application source: Challenge for authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L187-L215)
 - **/fidokeys/authentication**: This call submits a signed challenge (nonce) from the Authenticator to the FIDO2 Server via RP web application, after which authentication is complete and the user is logged in.
+  -  - [RP web application source: Challenge for authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L187-L215)
 
 ### Administration
 Admin calls are designed for managing registered Authenticators. **{kid}** is the unique ID of the Authenticator being manipulated. These calls require a user to be registered with at least one Authenticator, but not necessarily logged in (authenticated).
