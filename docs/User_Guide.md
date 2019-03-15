@@ -119,8 +119,13 @@ Specification details and definitions for the above parameters can be found in t
 *  [Authenticator Selection Criteria](https://w3c.github.io/webauthn/#dictdef-authenticatorselectioncriteria)
 *  [MetaData Service (MDS)](https://fidoalliance.org/metadata/)
 
-The included default policy enables all supported configuration choices for StrongKey FIDO2 Server; use any or all of them as needed. View the JSON content below; or if you would like to decode it on your own, follow these instructions:
-1. Search the _install-skfs.sh_ file contents for "Default Policy."
+The included default policy enables all supported configuration choices for StrongKey FIDO2 Server; use any or all of them as needed. View the JSON content below; or if you would like to decode it on your own, follow these instructions **after installation is complete**:
+
+1. In the _skfs_ database, run the following command:
+      
+       select * from fido_policies;
+   
+   See Step 6 of "Database Schema for StrongKey FIDO2 Server," below, for an example of what the entry looks like in the _fido_policies_ table. 
 2. Copy the encoded text entry from there and [decode it using the base64urlsafe](https://www.google.com/search?q=base64urlsafe+decoder) algorithm.
 3. Edit the file, making changes according to the options in table above.
 4. If changes have been made, save it as a text file.
