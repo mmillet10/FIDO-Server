@@ -80,8 +80,8 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 | "cryptography":  |  |  Governs behavior of attestation, Elliptic Curves, and signatures. EC tends to be faster and smaller than RSA, but is more complicated to implement. 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_formats":  |  ["fido-u2f, "packed", "tpm", "android-key", "android-safetynet", "none"]<br><br>**Supported Attestation Types by Format**<br>"fido-u2f": _basic, attca_<br>"packed": _basic, self, attca, ecdaa_<br>"tpm": _attca, ecdaa_<br>"android-key": _basic_<br>"android-safetynet": _basic_<br>"none": _none_ <br>|  Choices for "attestation types" (below) depend on the format chosen here. RP applications and servers determine acceptable attestation types by these policy parameters.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"elliptic_curves":  |  ["secp256r1", "secp384r1", "secp521r1", "curve25519"] |  EC protocols cannot use RSA keys and vice versa, but can co-exist on the same server, allowing the server to handle both.
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_rsa_signatures":  |  ["rsassa-pkcs1-v1_5-sha1", "rsassa-pkcs1-v1_5-sha256", "rsassa-pkcs1-v1_5-sha384", "rsassa-pkcs1-v1_5-sha512", "rsassa-pss-sha256", "rsassa-pss-sha384", "rsassa-pss-sha512"]  |  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_ec_signatures":  |  ["ecdsa-p256-sha256", "ecdsa-p384-sha384", "ecdsa-p521-sha512", "eddsa", "ecdsa-p256k-sha256"]  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_rsa_signatures":  |  ["rsassa-pkcs1-v1_5-sha1", "rsassa-pkcs1-v1_5-sha256", "rsassa-pkcs1-v1_5-sha384", "rsassa-pkcs1-v1_5-sha512", "rsassa-pss-sha256", "rsassa-pss-sha384", "rsassa-pss-sha512"]  |  PSS is an improved version of PKCS.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_ec_signatures":  |  ["ecdsa-p256-sha256", "ecdsa-p384-sha384", "ecdsa-p521-sha512", "eddsa", "ecdsa-p256k-sha256"]  |  See the links after this table for more info on these signature types.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_types":  |  ["basic", "self", "attca", "ecdaa", "none"]  |  Determined by which "attestation_format" (see above) is chosen.
 "registration":  |  | Governs registration behavior.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation":  |  [**"none"**, "indirect", "direct"]<br><br>"none": Attestation statement does not matter to the RP web application.<br>"direct": RP web application uses attestation from the Authenticator.<br>"indirect": Client determines attestation statement; source may vary.  |  Determines acceptable sources from which the RP web application will receive the attestation statement (q.v. "attestation format").
@@ -99,7 +99,7 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 "counter": |  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireIncrease":  |  true or false
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireCounter":  |  true or false
-"storeSignatures":  | true or false |
+"storeSignatures":  | true or false |  
 "extensions": |  |  Governs extension behavior.
 | "mds":  |  | 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoints":  | 
