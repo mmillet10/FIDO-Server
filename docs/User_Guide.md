@@ -125,7 +125,7 @@ The included default policy enables all supported configuration choices for Stro
       
        select * from fido_policies;
    
-   See Step 6 of "Database Schema for StrongKey FIDO2 Server," below, for an example of what the entry looks like in the _fido_policies_ table. 
+   See Step 6 of [Database Schema for StrongKey FIDO2 Server](#database-schema-for-strongkey-fido2-server)," below, for an example of what the entry looks like in the _fido_policies_ table. 
 2. Copy the encoded text entry from there and [decode it using the base64urlsafe](https://www.google.com/search?q=base64urlsafe+decoder) algorithm.
 3. Edit the file, making changes according to the options in table above.
 4. If changes have been made, save it as a text file.
