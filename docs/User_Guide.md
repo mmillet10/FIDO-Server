@@ -88,8 +88,8 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...] 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireResidentKey":  |  [true, false] (**can be both&dagger;**)  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"excludeCredentials":  |  "enabled" or "disabled" | 
 "authentication":  |  | Governs registration behavior.
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", "preferred", "discouraged"]&Dagger;  |  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowCredentials":  |  "enabled" or "disabled"  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", "preferred", "discouraged"]&Dagger;<br><br>"required": The RP web application will fail without the uV flag.<b>"preferred": The RP web application prefers a uV flag, but will not fail wihtout one.<br>"discouraged": The RP web application does not want user verification.  |  Governs if and how the RP web application accepts the uV flag.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowCredentials":  |  "enabled" or **"disabled"**  |  
 "rp":  |
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":  |  "demo.strongauth.com:8181"
 "counter": |  |  
