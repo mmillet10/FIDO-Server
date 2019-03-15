@@ -126,6 +126,7 @@ The included default policy enables all supported configuration choices for Stro
 4. If changes have been made, save it as a text file.
 5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)), then replace it in the script.
 6. Save _install-skfs.sh_.
+7. Restart the web application server.
 ~~~~
 {
 	"storeSignatures": false,
