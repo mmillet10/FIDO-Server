@@ -28,7 +28,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Startup
-@Singleton
+@Singleton(name = "DatabaseLoader")
 public class DatabaseLoader {
     @PersistenceContext
     private EntityManager em;
