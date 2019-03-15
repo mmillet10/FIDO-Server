@@ -12,25 +12,18 @@
 ##########################################
 # Server Passwords
 LINUX_PASSWORD=ShaZam123
-MARIA_ROOT_PASSWORD=BigKahuna
-MARIA_SKFSDBUSER_PASSWORD=AbracaDabra
 
 XMXSIZE=512m
-BUFFERPOOLSIZE=512m
 
 ##########################################
 ##########################################
 
 # Flags to indicate if a module should be installed
 INSTALL_GLASSFISH=Y
-INSTALL_MARIA=Y
 INSTALL_FIDO=Y
 
 # Start Required Distributables
 GLASSFISH=payara-4.1.2.181.zip
-JEMALLOC=jemalloc-3.6.0-1.el7.x86_64.rpm
-MARIA=mariadb-10.2.13-linux-x86_64.tar.gz
-MARIACONJAR=mariadb-java-client-2.2.2.jar
 # End Required Distributables
 
 # Other vars
@@ -38,9 +31,6 @@ STRONGKEY_HOME=/usr/local/strongkey
 SKFS_HOME=$STRONGKEY_HOME/skfs
 GLASSFISH_HOME=$STRONGKEY_HOME/payara41/glassfish
 GLASSFISH_CONFIG=$GLASSFISH_HOME/domains/domain1/config
-MARIAVER=mariadb-10.2.13-linux-x86_64
-MARIATGT=mariadb-10.2.13
-MARIA_HOME=$STRONGKEY_HOME/$MARIATGT
 SKFS_SOFTWARE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 function check_exists {
@@ -77,10 +67,10 @@ APT_GET_CMD=$(which apt-get 2>/dev/null)
 
 echo "Installing required linux packages ..."
 if [[ ! -z $YUM_CMD ]]; then
-    yum -y install wget unzip libaio java-1.8.0-openjdk >/dev/null 2>&1
+    yum -y install wget unzip java-1.8.0-openjdk >/dev/null 2>&1
 elif [[ ! -z $APT_GET_CMD ]]; then
     apt-get update >/dev/null 2>&1
-    apt install wget unzip libaio1 openjdk-8-jdk-headless daemon rng-tools -y >/dev/null 2>&1
+    apt install wget unzip openjdk-8-jdk-headless daemon rng-tools -y >/dev/null 2>&1
 else
    echo "error can't install packages"
    exit 1;
@@ -91,21 +81,6 @@ fi
 if [ ! -f $SKFS_SOFTWARE/$GLASSFISH ]; then
         echo "Downloading Payara ..."
         wget http://repo1.maven.org/maven2/fish/payara/distributions/payara/4.1.2.181/payara-4.1.2.181.zip -q
-fi
-
-if [ ! -f $SKFS_SOFTWARE/$MARIA ]; then
-        echo "Downloading MARIADB SERVER ..."
-        wget https://downloads.mariadb.org/interstitial/mariadb-10.2.13/bintar-linux-x86_64/mariadb-10.2.13-linux-x86_64.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/ -O mariadb-10.2.13-linux-x86_64.tar.gz -q
-fi
-
-if [ ! -f $SKFS_SOFTWARE/$MARIACONJAR ]; then
-        echo "Downloading MARIADB JAVA CONNECTOR ..."
-        wget https://downloads.mariadb.com/Connectors/java/connector-java-2.2.2/mariadb-java-client-2.2.2.jar -q
-fi
-
-if [ ! -f $SKFS_SOFTWARE/$JEMALLOC ]; then
-        echo "Downloading JEMALLOC ..."
-        wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/j/jemalloc-3.6.0-1.el7.x86_64.rpm -q
 fi
 
 
@@ -127,10 +102,6 @@ fi
 # Check that all files are present
 if [ $INSTALL_GLASSFISH = 'Y' ]; then
         check_exists $SKFS_SOFTWARE/$GLASSFISH
-fi
-
-if [ $INSTALL_MARIA = 'Y' ]; then
-        check_exists $SKFS_SOFTWARE/$MARIA $SKFS_SOFTWARE/$JEMALLOC $SKFS_SOFTWARE/$MARIACONJAR
 fi
 
 if [ $INSTALL_FIDO = 'Y' ]; then
@@ -157,23 +128,21 @@ echo strongkey:$LINUX_PASSWORD | /usr/sbin/chpasswd
 cat >> /etc/sudoers <<-EOFSUDOERS
 
 ## SKFS permissions
-Cmnd_Alias SKFS_COMMANDS = /usr/sbin/service glassfishd start, /usr/sbin/service glassfishd stop, /usr/sbin/service glassfishd restart, /usr/sbin/service mysqld start, /usr/sbin/service mysqld stop, /usr/sbin/service mysqld restart
+Cmnd_Alias SKFS_COMMANDS = /usr/sbin/service glassfishd start, /usr/sbin/service glassfishd stop, /usr/sbin/service glassfishd restart
 strongkey ALL=SKFS_COMMANDS
 EOFSUDOERS
 
 ##### Create skfsrc #####
 cat > /etc/skfsrc << EOFSKFSRC
     export GLASSFISH_HOME=$GLASSFISH_HOME
-        export MYSQL_HOME=$MARIA_HOME
    export STRONGKEY_HOME=$STRONGKEY_HOME
-              export PATH=\$GLASSFISH_HOME/bin:\$MYSQL_HOME/bin:\$STRONGKEY_HOME/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin
+              export PATH=\$GLASSFISH_HOME/bin:\$STRONGKEY_HOME/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin
 
 alias str='cd $STRONGKEY_HOME'
 alias dist='cd $STRONGKEY_HOME/dist'
 alias aslg='cd $GLASSFISH_HOME/domains/domain1/logs'
 alias ascfg='cd $GLASSFISH_HOME/domains/domain1/config'
 alias tsl='tail --follow=name $GLASSFISH_HOME/domains/domain1/logs/server.log'
-alias mys='mysql -u skfsdbuser -p\`dbpass 2> /dev/null\` skfs'
 alias java='java -Djavax.net.ssl.trustStore=\$STRONGKEY_HOME/certs/cacerts '
 EOFSKFSRC
 
@@ -210,58 +179,6 @@ if [ $INSTALL_FIDO = 'Y' ]; then
 
 fi
 
-##### MariaDB #####
-if [ $INSTALL_MARIA = 'Y' ]; then
-        echo "Installing MariaDB..."
-        if [ $SHOWALL ]; then
-                tar zxvf $SKFS_SOFTWARE/$MARIA -C $STRONGKEY_HOME
-        else
-                tar zxf $SKFS_SOFTWARE/$MARIA -C $STRONGKEY_HOME
-        fi
-
-        rpm -ivh $SKFS_SOFTWARE/$JEMALLOC &> /dev/null
-        sed -i 's|^mysqld_ld_preload=$|mysqld_ld_preload=/usr/lib64/libjemalloc.so.1|' $STRONGKEY_HOME/$MARIAVER/bin/mysqld_safe
-        cp $STRONGKEY_HOME/$MARIAVER/support-files/mysql.server /etc/init.d/mysqld
-        chmod 755 /etc/init.d/mysqld
-        /lib/systemd/systemd-sysv-install enable mysqld
-        mkdir $STRONGKEY_HOME/$MARIAVER/backups $STRONGKEY_HOME/$MARIAVER/binlog $STRONGKEY_HOME/$MARIAVER/log $STRONGKEY_HOME/$MARIAVER/ibdata
-        mv $STRONGKEY_HOME/$MARIAVER $STRONGKEY_HOME/$MARIATGT
-
-        DBSIZE=10M
-        SERVER_BINLOG=$STRONGKEY_HOME/$MARIATGT/binlog/skfs-binary-log
-
-        cat > /etc/my.cnf <<-EOFMYCNF
-	[client]
-	socket                          = /usr/local/strongkey/$MARIATGT/log/mysqld.sock
-
-	[mysqld]
-	user                            = strongkey
-	lower_case_table_names          = 1
-	log-bin                         = $SERVER_BINLOG
-
-	[server]
-	basedir                         = /usr/local/strongkey/$MARIATGT
-	datadir                         = /usr/local/strongkey/$MARIATGT/ibdata
-	pid-file                        = /usr/local/strongkey/$MARIATGT/log/mysqld.pid
-	socket                          = /usr/local/strongkey/$MARIATGT/log/mysqld.sock
-	general_log                     = 0
-	general_log_file                = /usr/local/strongkey/$MARIATGT/log/mysqld.log
-	log-error                       = /usr/local/strongkey/$MARIATGT/log/mysqld-error.log
-	innodb_data_home_dir            = /usr/local/strongkey/$MARIATGT/ibdata
-	innodb_data_file_path           = ibdata01:$DBSIZE:autoextend
-	innodb_flush_method             = O_DIRECT
-	innodb_buffer_pool_size         = ${BUFFERPOOLSIZE}
-	innodb_log_file_size            = 512M
-	innodb_log_buffer_size          = 5M
-	innodb_flush_log_at_trx_commit  = 1
-	sync_binlog                     = 1
-	lower_case_table_names          = 1
-	max_connections                 = 1000
-	thread_cache_size               = 1000
-	expire_logs_days                = 10
-	EOFMYCNF
-fi
-
 ##### Payara #####
 if [ $INSTALL_GLASSFISH = 'Y' ]; then
         echo "Installing Payara..."
@@ -291,46 +208,13 @@ if [ $INSTALL_GLASSFISH = 'Y' ]; then
         keytool -exportcert -alias s1as -file $STRONGKEY_HOME/certs/$(hostname).der --keystore $GLASSFISH_CONFIG/keystore.jks -storepass changeit &>/dev/null
         keytool -importcert -noprompt -alias $(hostname) -file $STRONGKEY_HOME/certs/$(hostname).der --keystore $STRONGKEY_HOME/certs/cacerts -storepass changeit &>/dev/null
         keytool -importcert -noprompt -alias $(hostname) -file $STRONGKEY_HOME/certs/$(hostname).der --keystore $GLASSFISH_CONFIG/cacerts.jks -storepass changeit &>/dev/null
-
-        ##### MariaDB JDBC Driver #####
-        echo "Installing JDBC Driver..."
-        cp $SKFS_SOFTWARE/$MARIACONJAR $GLASSFISH_HOME/lib
 fi
 
 
 ##### Change ownership of files #####
 chown -R strongkey:strongkey $STRONGKEY_HOME
 
-##### Start MariaDB and Payara #####
-echo -n "Creating $DBSIZE SKFS Internal Database..."
-cd $STRONGKEY_HOME/$MARIATGT
-scripts/mysql_install_db --basedir=`pwd` --datadir=`pwd`/ibdata &>/dev/null
-# Sleep till the database is created
-bin/mysqld_safe &>/dev/null &
-READY=`grep "ready for connections" $MARIA_HOME/log/mysqld-error.log | wc -l`
-while [ $READY -ne 1 ]
-do
-        echo -n . 
-        sleep 3
-        READY=`grep "ready for connections" $MARIA_HOME/log/mysqld-error.log | wc -l`
-done
-echo done 
-$MARIA_HOME/bin/mysql -u root mysql -e "update user set password=password('$MARIA_ROOT_PASSWORD') where user = 'root';
-                                                    delete from mysql.db where host = '%';
-                                                    delete from mysql.user where user = '';
-                                                    create database skfs;
-                                                    grant all on skfs.* to skfsdbuser@localhost identified by '$MARIA_SKFSDBUSER_PASSWORD';
-                                                    flush privileges;"
-cd $SKFS_SOFTWARE/fidoserverSQL
-$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs --quick < create.txt
-
-# Add server entries to SERVERS table
-$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "insert into SERVERS values (1, '$(hostname)', 'Active', 'Both', 'Active', null, null);"
-
-$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "insert into DOMAINS values (1,'SKFS','Active','Active','-----BEGIN CERTIFICATE-----\nMIIDizCCAnOgAwIBAgIENIYcAzANBgkqhkiG9w0BAQsFADBuMRcwFQYDVQQKEw5T\ndHJvbmdBdXRoIEluYzEjMCEGA1UECxMaU0tDRSBTaWduaW5nIENlcnRpZmljYXRl\nIDExEzARBgNVBAsTClNBS0EgRElEIDExGTAXBgNVBAMTEFNLQ0UgU2lnbmluZyBL\nZXkwHhcNMTkwMTMwMjI1NDAwWhcNMTkwNDMwMjI1NDAwWjBuMRcwFQYDVQQKEw5T\ndHJvbmdBdXRoIEluYzEjMCEGA1UECxMaU0tDRSBTaWduaW5nIENlcnRpZmljYXRl\nIDExEzARBgNVBAsTClNBS0EgRElEIDExGTAXBgNVBAMTEFNLQ0UgU2lnbmluZyBL\nZXkwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCH/W7ERX0U3a+2VLBY\nyjpCRTCdRtiuiLv+C1j64gLAyseF5sMH+tLNcqU0WgdZ3uQxb2+nl2y8Cp0B8Cs9\nvQi9V9CIC7zvMvgveQ711JqX8RMsaGBrn+pWx61E4B1kLCYCPSI48Crm/xkMydGM\nTKXHpfb+t9uo/uat/ykRrel5f6F764oo0o1KJkY6DjFEMh9TKMbJIeF127S2pFxl\nNNBhawTDGDaA1ag9GoWHGCWZ/bbCMMiwcH6q71AqRg8qby1EsBKA7E4DD8f+5X6b\nU3zcY3kudKlYxP4rix42PHCY3B4ZnpWS3A6lZRBot7NklsLvlxvDbKIiTcyDvSA0\nunfpAgMBAAGjMTAvMA4GA1UdDwEB/wQEAwIHgDAdBgNVHQ4EFgQUlSKnwxvmv8Bh\nlkFSMeEtAM7AyakwDQYJKoZIhvcNAQELBQADggEBAG2nosn6cTsZTdwRGws61fhP\n+tvSZXpE5mYk93x9FTnApbbsHJk1grWbC2psYxzuY1nYTqE48ORPngr3cHcNX0qZ\npi9JQ/eh7AaCLQcb1pxl+fJAjnnHKCKpicyTvmupv6c97IE4wa2KoYCJ4BdnJPnY\nnmnePPqDvjnAhuCTaxSRz59m7aW4Tyt9VPsoBShrCSBYzK5cH3FNIGffqB7zI3Jh\nXo0WpVD/YBE/OsWRbthZ0OquJIfxcpdXS4srCFocQlqNMhlQ7ZVOs73WrRx+uGIr\nhUYvIJrqgAc7+F0I7v2nAQLmxMBYheZDhN9DA9LuJRV93A8ELIX338DKxBKBPPU=\n-----END CERTIFICATE-----',NULL,'-----BEGIN CERTIFICATE-----\nMIIDizCCAnOgAwIBAgIENIYcAzANBgkqhkiG9w0BAQsFADBuMRcwFQYDVQQKEw5T\ndHJvbmdBdXRoIEluYzEjMCEGA1UECxMaU0tDRSBTaWduaW5nIENlcnRpZmljYXRl\nIDExEzARBgNVBAsTClNBS0EgRElEIDExGTAXBgNVBAMTEFNLQ0UgU2lnbmluZyBL\nZXkwHhcNMTkwMTMwMjI1NDAwWhcNMTkwNDMwMjI1NDAwWjBuMRcwFQYDVQQKEw5T\ndHJvbmdBdXRoIEluYzEjMCEGA1UECxMaU0tDRSBTaWduaW5nIENlcnRpZmljYXRl\nIDExEzARBgNVBAsTClNBS0EgRElEIDExGTAXBgNVBAMTEFNLQ0UgU2lnbmluZyBL\nZXkwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCH/W7ERX0U3a+2VLBY\nyjpCRTCdRtiuiLv+C1j64gLAyseF5sMH+tLNcqU0WgdZ3uQxb2+nl2y8Cp0B8Cs9\nvQi9V9CIC7zvMvgveQ711JqX8RMsaGBrn+pWx61E4B1kLCYCPSI48Crm/xkMydGM\nTKXHpfb+t9uo/uat/ykRrel5f6F764oo0o1KJkY6DjFEMh9TKMbJIeF127S2pFxl\nNNBhawTDGDaA1ag9GoWHGCWZ/bbCMMiwcH6q71AqRg8qby1EsBKA7E4DD8f+5X6b\nU3zcY3kudKlYxP4rix42PHCY3B4ZnpWS3A6lZRBot7NklsLvlxvDbKIiTcyDvSA0\nunfpAgMBAAGjMTAvMA4GA1UdDwEB/wQEAwIHgDAdBgNVHQ4EFgQUlSKnwxvmv8Bh\nlkFSMeEtAM7AyakwDQYJKoZIhvcNAQELBQADggEBAG2nosn6cTsZTdwRGws61fhP\n+tvSZXpE5mYk93x9FTnApbbsHJk1grWbC2psYxzuY1nYTqE48ORPngr3cHcNX0qZ\npi9JQ/eh7AaCLQcb1pxl+fJAjnnHKCKpicyTvmupv6c97IE4wa2KoYCJ4BdnJPnY\nnmnePPqDvjnAhuCTaxSRz59m7aW4Tyt9VPsoBShrCSBYzK5cH3FNIGffqB7zI3Jh\nXo0WpVD/YBE/OsWRbthZ0OquJIfxcpdXS4srCFocQlqNMhlQ7ZVOs73WrRx+uGIr\nhUYvIJrqgAc7+F0I7v2nAQLmxMBYheZDhN9DA9LuJRV93A8ELIX338DKxBKBPPU=\n-----END CERTIFICATE-----',NULL,'CN=SKFS Signing Key,OU=DID 1,OU=SKFS Signing Certificate 1,O=StrongKey','https://$(hostname):8181/app.json',NULL);"
-
-$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "insert into FIDO_POLICIES values (1,1,1,NOW(),NULL,'Default Policy','eyJzdG9yZVNpZ25hdHVyZXMiOmZhbHNlLCJleHRlbnNpb25zIjp7ImV4YW1wbGUuZXh0ZW5zaW9uIjp0cnVlfSwidXNlclNldHRpbmdzIjp0cnVlLCJjcnlwdG9ncmFwaHkiOnsiYXR0ZXN0YXRpb25fZm9ybWF0cyI6WyJmaWRvLXUyZiIsInBhY2tlZCIsInRwbSIsImFuZHJvaWQta2V5IiwiYW5kcm9pZC1zYWZldHluZXQiLCJub25lIl0sImVsbGlwdGljX2N1cnZlcyI6WyJzZWNwMjU2cjEiLCJzZWNwMzg0cjEiLCJzZWNwNTIxcjEiLCJjdXJ2ZTI1NTE5Il0sImFsbG93ZWRfcnNhX3NpZ25hdHVyZXMiOlsicnNhc3NhLXBrY3MxLXYxXzUtc2hhMSIsInJzYXNzYS1wa2NzMS12MV81LXNoYTI1NiIsInJzYXNzYS1wa2NzMS12MV81LXNoYTM4NCIsInJzYXNzYS1wa2NzMS12MV81LXNoYTUxMiIsInJzYXNzYS1wc3Mtc2hhMjU2IiwicnNhc3NhLXBzcy1zaGEzODQiLCJyc2Fzc2EtcHNzLXNoYTUxMiJdLCJhbGxvd2VkX2VjX3NpZ25hdHVyZXMiOlsiZWNkc2EtcDI1Ni1zaGEyNTYiLCJlY2RzYS1wMzg0LXNoYTM4NCIsImVjZHNhLXA1MjEtc2hhNTEyIiwiZWRkc2EiLCJlY2RzYS1wMjU2ay1zaGEyNTYiXSwiYXR0ZXN0YXRpb25fdHlwZXMiOlsiYmFzaWMiLCJzZWxmIiwiYXR0Y2EiLCJlY2RhYSIsIm5vbmUiXX0sInJlZ2lzdHJhdGlvbiI6eyJhdHRlc3RhdGlvbiI6WyJub25lIiwiaW5kaXJlY3QiLCJkaXJlY3QiXSwiZGlzcGxheU5hbWUiOiJyZXF1aXJlZCIsImF1dGhlbnRpY2F0b3JTZWxlY3Rpb24iOnsiYXV0aGVudGljYXRvckF0dGFjaG1lbnQiOlsicGxhdGZvcm0iLCJjcm9zcy1wbGF0Zm9ybSJdLCJ1c2VyVmVyaWZpY2F0aW9uIjpbInJlcXVpcmVkIiwicHJlZmVycmVkIiwiZGlzY291cmFnZWQiXSwicmVxdWlyZVJlc2lkZW50S2V5IjpbdHJ1ZSxmYWxzZV19LCJleGNsdWRlQ3JlZGVudGlhbHMiOiJlbmFibGVkIn0sImNvdW50ZXIiOnsicmVxdWlyZUluY3JlYXNlIjp0cnVlLCJyZXF1aXJlQ291bnRlciI6ZmFsc2V9LCJycCI6eyJuYW1lIjoiU3Ryb25nS2V5IEZJRE8yIFNlcnZlciJ9LCJhdXRoZW50aWNhdGlvbiI6eyJ1c2VyVmVyaWZpY2F0aW9uIjpbInJlcXVpcmVkIiwicHJlZmVycmVkIiwiZGlzY291cmFnZWQiXSwiYWxsb3dDcmVkZW50aWFscyI6ImVuYWJsZWQifX0',1,'Active','',NOW(),NULL,NULL);"
-
+##### Start Payara #####
 touch $STRONGKEY_HOME/crypto/etc/crypto-configuration.properties
 
 echo "appliance.cfg.property.serverid=1" > $STRONGKEY_HOME/appliance/etc/appliance-configuration.properties
@@ -352,15 +236,6 @@ $GLASSFISH_HOME/bin/asadmin set server.network-config.protocols.protocol.http-li
 $GLASSFISH_HOME/bin/asadmin set server.network-config.protocols.protocol.http-listener-2.ssl.tls11-enabled=false
 $GLASSFISH_HOME/bin/asadmin set server.network-config.protocols.protocol.http-listener-2.http.trace-enabled=false
 $GLASSFISH_HOME/bin/asadmin set server.network-config.protocols.protocol.http-listener-2.http.xpowered-by=false
-$GLASSFISH_HOME/bin/asadmin create-jdbc-connection-pool \
-        --datasourceclassname org.mariadb.jdbc.MySQLDataSource \
-        --restype javax.sql.ConnectionPoolDataSource \
-        --isconnectvalidatereq=true \
-        --validationmethod meta-data \
-        --property ServerName=localhost:DatabaseName=skfs:port=3306:user=skfsdbuser:password=$MARIA_SKFSDBUSER_PASSWORD:DontTrackOpenResources=true \
-        SKFSPool
-$GLASSFISH_HOME/bin/asadmin create-jdbc-resource --connectionpoolid SKFSPool jdbc/skfs
-$GLASSFISH_HOME/bin/asadmin set server.resources.jdbc-connection-pool.SKFSPool.max-pool-size=1000
 $GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool.max-thread-pool-size=1000
 $GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool.min-thread-pool-size=10
 
@@ -378,16 +253,6 @@ cat > $GLASSFISH_HOME/domains/domain1/docroot/app.json << EOFAPPJSON
   }]
 }
 EOFAPPJSON
-
-# Add other servers to app.json
-for fqdn in $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select fqdn from servers;"); do
-        # Skip doing ourself again
-        if [ "$fqdn" == "$(hostname)" ]; then
-                continue
-        fi
-        sed -i "/^\[/a \"           https://$fqdn:8181\"," $GLASSFISH_HOME/domains/domain1/docroot/app.json
-        sed -i "/^\[/a \"           https://$fqdn\"," $GLASSFISH_HOME/domains/domain1/docroot/app.json
-done
 
 chown strongkey $GLASSFISH_HOME/domains/domain1/docroot/app.json
 
