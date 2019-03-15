@@ -84,6 +84,7 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_ec_signatures":  |  ["ecdsa-p256-sha256", "ecdsa-p384-sha384", "ecdsa-p521-sha512", "eddsa", "ecdsa-p256k-sha256"]  |  See the links after this table for more info on these signature types.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_types":  |  ["basic", "self", "attca", "ecdaa", "none"]  |  Determined by which "attestation_format" (see above) is chosen.
 "registration":  |  | Governs registration behavior.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"icon":  |
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation":  |  [**"none"**, "indirect", "direct"]<br><br>"none": Attestation statement does not matter to the RP web application.<br>"direct": RP web application uses attestation from the Authenticator.<br>"indirect": Client determines attestation statement; source may vary.  |  Determines acceptable sources from which the RP web application will receive the attestation statement (q.v. "attestation format").
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"displayName":  |  ["required", **"preferred"**]<br><br>"required": The RP web application will fail without the displayName.<br>"preferred": The RP web application prefers a displayName, but will not fail without one.  |  Describes the RP web application's requirements regarding user verification for the get() operation.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorSelection":  |  |  Is the Authenticator attached to a device, or portable?
@@ -95,12 +96,12 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", **"preferred"**, "discouraged"]&Dagger;<br><br>"required": The RP web application will fail without the uV flag.<br>"preferred": The RP web application prefers a uV flag, but will not fail without one.<br>"discouraged": The RP web application does not want user verification.  |  Describes the RP web application's requirements regarding user verification for the get() operation.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowCredentials":  |  "enabled" or **"disabled"** | Contains a list of public key credentials acceptable to the caller, in order of preference.
 "rp":  |  | Identifies the Relying Party server on whose behalf a given registration or authentication ceremony is being performed.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id":  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":  |  "demo.strongauth.com:8181"  | Must be a valid domain name, and may include ports.
-"counter": |  |  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireIncrease":  |  true or false
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireCounter":  |  true or false
-"storeSignatures":  | true or false |  
-"extensions": |  |  Governs extension behavior.
+"counter": |  |  A suggested feature allowing an RP web application to possiblity detect that an authenticator has been copied.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireIncrease":  |  **true** or false<br><br>"true": the RP web application fails authentication requests lacking a counter value higher than the previous authentication.<br>"false": Authentication can provide a counter value identical to the last successful authentication. A warning will be returned that the authenticator might have been cloned.  |  **UNIMPLEMENTED.**<br>Enables the RP to reject or accept non-increasing or duplicate counter values.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireCounter":  |  true or **false**<br><br>"true": Requires a counter from the authenticator and fails if there is none.<br>"false": Allows counterless authenticators |  Allows implementations that lack a counter.
+"extensions": |  |  **UNIMPLEMENTED**<br>Governs extension behavior.
 | "mds":  |  | 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoints":  | 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":    |  ["https://mds2.fidoalliance.org"]
