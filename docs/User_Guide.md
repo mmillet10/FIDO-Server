@@ -122,14 +122,16 @@ The included default policy enables all supported configuration choices for Stro
 
 1. In the _skfs_ database, run the following command:
       
-       select * from fido_policies;
+       select policy from fido_policies where sid=1;
    
-   See Step 6 of [Database Schema for StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#database-schema-for-strongkey-fido2-server)," below, for an example of what the entry looks like in the _fido_policies_ table. 
+   See Step 6 of [Database Schema for StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#database-schema-for-strongkey-fido2-server)," below, for an example of what the entry looks like in the _fido_policies_ table. Make a note of 
 2. Copy the encoded text entry from there and [decode it using the base64urlsafe](https://www.google.com/search?q=base64urlsafe+decoder) algorithm.
 3. Edit the file, making changes according to the options in table above.
 4. If changes have been made, save it as a text file.
-5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)), then replace it in the script.
-6. Save _install-skfs.sh_.
+5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)), then replace it in the table.
+
+	update fido_policies set policy="<past_encoded_policy_here>" where sid=1;
+	
 7. Restart the web application server.
 ~~~~
 {
@@ -170,7 +172,7 @@ The included default policy enables all supported configuration choices for Stro
 ~~~~
 
 ### Options for the Database Server
-The instructions for database installation assume strong administrative experience with _structured query language (SQL)_ and methods for your database of choice. StrongKey FIDO2 Server has been tested using MariaDB 10.2.13, but other databases may work. Where possible, _American National Standards Institute (ANSI)_ SQL commands have been used, but due to the variable nature of proprietary SQL, we leave it to the database administrator to choose the appropriate commands for the particular flavor of SQL being used. Beyond the initial creation of users and tables, and the inserting of data therein, there is no reason for direct manipulation of the database once StrongKey FIDO2 Server is installed.
+The instructions for database installation assume strong administrative experience with _structured query language (SQL)_ and methods for your database of choice. StrongKey FIDO2 Server has been tested using MariaDB 10.2.13, but other databases may work. Where possible, _American National Standards Institute (ANSI)_ SQL commands have been used, but due to the variable nature of proprietary SQL, we leave it to the database administrator to choose the appropriate commands for the particular flavor of SQL being used. Beyond the initial creation of users and tables and insertion of data therein&mdash;and modifying the policy&mdash;there is no reason for direct manipulation of the database once StrongKey FIDO2 Server is installed.
 
 The StrongKey FIDO2 Server code references table and column names in all lowercase. Despite the fact that the create and insert statements used include uppercase names, please check to make sure all the table and column names in the _skfs_ database are lowercase before proceeding.
 
