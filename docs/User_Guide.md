@@ -104,7 +104,7 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 | "mds":  |  |  A catalog of trusted vendors and Authenticators, including those that have been compromised. 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoints":  |  | A list of MDS URLs and (optionally) their access tokens.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":    |  ["https://mds2.fidoalliance.org"]  |  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"token":  |  <Get from [https://mds2.fidoalliance.org/tokens/](https://mds2.fidoalliance.org/tokens/)>  |  The access token required by the FIDO alliance's production MDS to access the service.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"token":  |  <Get from [https://mds2.fidoalliance.org/tokens/](https://mds2.fidoalliance.org/tokens/)>  |  The access token required by the FIDO Alliance's production MDS to access the service.
 
 &dagger;&mdash;These fields specify acceptable values the RP web application may request during _/fidokeys/registration/challenge_.
 
@@ -113,8 +113,8 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 Specification details and definitions for the above parameters can be found in the following links:
 *  [Web Authentication: An API for accessing Public Key Credentials - Level 2](https://w3c.github.io/webauthn/)
 *  Internet Engineering Task Force (IETF) PKCS #1: RSA Cryptography Specifications Version 2.2 [pages 32-39](https://tools.ietf.org/html/rfc8017#page-32) and [pages 60-62](https://tools.ietf.org/html/rfc8017#page-60)
-*  [Elliptic Curve Digital Signature Algorithm (ECDSA)](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)
-*  [Edwards-curve Digital Signature Algorithm (EdDSA)](https://en.wikipedia.org/wiki/EdDSA)
+*  [Elliptic Curve Digital Signature Algorithm (ECDSA)](https://www.ietf.org/rfc/rfc6979.txt)
+*  [Edwards-curve Digital Signature Algorithm (EdDSA)](https://tools.ietf.org/html/rfc8032)
 *  [Authenticator Selection Criteria](https://w3c.github.io/webauthn/#dictdef-authenticatorselectioncriteria)
 *  [MetaData Service (MDS)](https://fidoalliance.org/metadata/)
 
