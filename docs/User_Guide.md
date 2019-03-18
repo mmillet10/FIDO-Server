@@ -130,7 +130,7 @@ The included default policy enables all supported configuration choices for Stro
 4. If changes have been made, save it as a text file.
 5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)), then replace it in the table.
 
-	update fido_policies set policy="<past_encoded_policy_here>" where sid=1;
+        update fido_policies set policy="<past_encoded_policy_here>" where sid=1;
 	
 7. Restart the web application server.
 ~~~~
