@@ -96,17 +96,15 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"userVerification":  |  ["required", **"preferred"**, "discouraged"]&Dagger;<br><br>"required": The RP web application will fail without the uV flag.<br>"preferred": The RP web application prefers a uV flag, but will not fail without one.<br>"discouraged": The RP web application does not want user verification.  |  Describes the RP web application's requirements regarding user verification for the get() operation.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowCredentials":  |  "enabled" or **"disabled"** | Contains a list of public key credentials acceptable to the caller, in order of preference.
 "rp":  |  | Identifies the Relying Party server on whose behalf a given registration or authentication ceremony is being performed.
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id":  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id":  |  |  The unique Relying Party identifier, RP ID.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":  |  "demo.strongauth.com:8181"  | Must be a valid domain name, and may include ports.
 "counter": |  |  A suggested feature allowing an RP web application to possiblity detect that an authenticator has been copied.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireIncrease":  |  **true** or false<br><br>"true": the RP web application fails authentication requests lacking a counter value higher than the previous authentication.<br>"false": Authentication can provide a counter value identical to the last successful authentication. A warning will be returned that the authenticator might have been cloned.  |  **UNIMPLEMENTED.**<br>Enables the RP to reject or accept non-increasing or duplicate counter values.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireCounter":  |  true or **false**<br><br>"true": Requires a counter from the authenticator and fails if there is none.<br>"false": Allows counterless authenticators |  Allows implementations that lack a counter.
-"extensions": |  |  **UNIMPLEMENTED**<br>Governs extension behavior.
-| "mds":  |  | 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoints":  | 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":    |  ["https://mds2.fidoalliance.org"]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"token":  |  <Get from [https://mds2.fidoalliance.org/tokens/](https://mds2.fidoalliance.org/tokens/)> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"certification":  |  ["FIDO_CERTIFIED", "NOT_FIDO_CERTIFIED", "USER_VERIFICATION_BYPASS", "ATTESTATION_KEY_COMPROMISE", "USER_KEY_REMOTE_COMPROMISE", "USER_KEY_PHYSICAL_COMPROMISE", "UPDATE_AVAILABLE", "REVOKED", "SELF_ASSERTION_SUBMITTED", "FIDO_CERTIFIED_L1", "FIDO_CERTIFIED_L1plus", "FIDO_CERTIFIED_L2", "FIDO_CERTIFIED_L2plus", "FIDO_CERTIFIED_L3", "FIDO_CERTIFIED_L3plus"]  |  [FIDO Metadata Service (MDS) AuthenticatorStatus enum](https://fidoalliance.org/specs/fido-v2.0-id-20180227/fido-metadata-service-v2.0-id-20180227.html#authenticatorstatus-enum)
+| "mds":  |  |  A catalog of trusted vendors and authenticators, including those that have been compromised. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoints":  |  | A list of MDS URLs and (optionally) their access tokens.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":    |  ["https://mds2.fidoalliance.org"]  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"token":  |  <Get from [https://mds2.fidoalliance.org/tokens/](https://mds2.fidoalliance.org/tokens/)>  |  The access token required by the FIDO alliance's production MDS to access the service.
 
 &dagger;&mdash;These fields specify acceptable values the RP web application may request during _/fidokeys/registration/challenge_.
 
