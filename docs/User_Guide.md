@@ -11,14 +11,12 @@
 * [Alternate Configurations](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#alternate-configurations)
   * [Options with StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#options-with-strongkey-fido2-server)
     * [Policies and Their Use](https://github.com/khedrond/FIDO-Server/blob/master/docs/User_Guide.md#policies-and-their-use)
-    * [Application HOME Folders and the Path](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#application-home-folders-and-the-path)
   * [Options for the Database Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#options-for-the-database-server)
     * [Database Schema for StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#database-schema-for-strongkey-fido2-server)
-  * [Options for the Java Web Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#options-for-the-java-web-server)
+  * [Java Web Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#java-web-server)
     * [Create JDBC Resources](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#create-jdbc-resources)
-* [Deploy StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#deploy-strongkey-fido-server)
-* [WebAuthn Client Files](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#webauthn-client-files)
-* [Removing StrongKey FIDO2 Server and Its Components](https://github.com/khedrond/FIDO-Server/blob/master/docs/User_Guide.md#removing-strongkey-fido2-server-and-its-components)
+* [Deploy StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#deploy-strongkey-fido2-server)
+* [Removing StrongKey FIDO2 Server and Its Components](https://github.com/khedrond/FIDO-Server/blob/master/docs/User_Guide.md#removing-the-strongkey-fido2-server-and-its-components)
 
 ## Overview
 So you've installed StrongKey's FIDO2 Server and decided to delve deepe, into its internal workings. This User Guide will shepherd you through the fine points of configuring and permutating the necessary components to make our FIDO Server more customized to suit your needs.
@@ -32,10 +30,10 @@ The following _Application Programmer Interface (API)_ calls are the underpinnin
 These calls uniquely register a user, and are required before any other calls can be used. Though it is not required to include a Relying Party (RP) web application in the chain of events, it provides a number of [security benefits](https://www.w3.org/TR/webauthn/#sctn-rp-benefits). Using these calls a user, a Relying Party web applicaton, and the user’s client (containing at least one Authenticator) work in concert to generate a public key credential and associate it with the user’s RP web application account. This requires a test of user presence or user verification. We strongly recommend including a Relying Party web application in your architecture.
 - **/fidokeys/registration/challenge**: This is always the first call made for any user, as it initiates the registration process by obtaining a single-use, cryptographically strong random number (nonce) from the FIDO2 Server via the RP web application. From the FIDO2 Server the nonce is then sent to the Authenticator for signing.
   - [RP web application source: Challenge for new registration](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L81-L117)
-  - [RP web application source: Challenge to add authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L119-L154)
+  - [RP web application source: Challenge to add Authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L119-L154)
 - **/fidokeys**: This call submits a signed challenge (nonce) from the Authenticator to the FIDO2 Server via an RP web application, after which registration is complete and the user may log in. Upon success, the FIDO2 Authenticator public key is stored in the _skfs_ database.
   - [RP web application source: Register a new user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L119-L154)
-  - [RP web application source: Adding authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L156-L185)
+  - [RP web application source: Adding Authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L156-L185)
   - [WebAuthn client source: Pass RP registration challenge response to API](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js#L263-L296)
 
 **NOTE**: Registering additional Authenticators to an existing user makes use of the same REST APIs as when used for first-time registration, but the logic must be adjusted accordingly.
@@ -128,7 +126,7 @@ The included default policy enables all supported configuration choices for Stro
 2. Copy the encoded text entry from there and [decode it using the base64urlsafe](https://www.google.com/search?q=base64urlsafe+decoder) algorithm.
 3. Edit the file, making changes according to the options in table above.
 4. If changes have been made, save it as a text file.
-5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)), then replace it in the table by pasting it into the following command, then executing it at the database prompt: 
+5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)); replace it in the table by pasting it into the following command, then executing it at the database prompt: 
 
         update fido_policies set policy="<paste_encoded_policy_here>" where sid=1;
 	
@@ -279,19 +277,6 @@ The StrongKey FIDO2 Server is ready to be deployed.
     _[https://localhost:8181/api/application.wadl](https://localhost:8181/api/application.wadl)_
     
     The StrongKey FIDO2 Server application _Web Application Definition Language (WADL)_ displays.
-
-## WebAuthn Client Files
-StrongKey WebAuthn client uses the following files, contained in the _WebAuthn.tgz_ download, to operate with the StrongKey FIDO2 Server, Community Edition and the sample Relying Party web application code:
-- index.html
-- css/fonts.css
-- css/fido2demo.css
-- js/jquery-3.3.1.min.js
-- js/browserCheck.js
-- js/base64js.min.js
-- js/buffer-5.2.1.js
-- js/base64url.js
-- js/cbor.js
-- js/fido2demo.js
 
 ## Removing the StrongKey FIDO2 Server and Its Components
 
