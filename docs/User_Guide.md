@@ -128,9 +128,9 @@ The included default policy enables all supported configuration choices for Stro
 2. Copy the encoded text entry from there and [decode it using the base64urlsafe](https://www.google.com/search?q=base64urlsafe+decoder) algorithm.
 3. Edit the file, making changes according to the options in table above.
 4. If changes have been made, save it as a text file.
-5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)), then replace it in the table.
+5. [Re-encode it using base64urlsafe]((https://www.google.com/search?q=base64urlsafe+encoder)), then replace it in the table by pasting it into the following command, then executing it at the database prompt: 
 
-        update fido_policies set policy="**<paste_encoded_policy_here>**" where sid=1;
+        update fido_policies set policy="<paste_encoded_policy_here>" where sid=1;
 	
 7. Restart the web application server.
 ~~~~
