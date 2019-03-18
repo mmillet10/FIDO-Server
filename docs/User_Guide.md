@@ -101,7 +101,7 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"requireCounter":  |  true or **false**<br><br>"true": Requires a counter from the Authenticator and fails if there is none.<br>"false": Allows counterless Authenticators. |  Allows implementations that lack a counter.
 | "mds":  |  |  A catalog of trusted vendors and Authenticators, including those that have been compromised. 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoints":  |  | A list of MDS URLs and (optionally) their access tokens.
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":    |  ["https://mds2.fidoalliance.org"]  |  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":  |  ["https://mds2.fidoalliance.org"]  |  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"token":  |  <Get from [https://mds2.fidoalliance.org/tokens/](https://mds2.fidoalliance.org/tokens/)>  |  The access token required by the FIDO Alliance's production MDS to access the service.
 
 &dagger;&mdash;These fields specify acceptable values the RP web application may request during _/fidokeys/registration/challenge_.
