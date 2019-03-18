@@ -80,10 +80,10 @@ Policy Attribute(s) | Accepted Values &nbsp;&nbsp;&nbsp;[...] = Multiple Choice,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"elliptic_curves":  |  ["secp256r1", "secp384r1", "secp521r1", "curve25519"] |  EC protocols cannot use RSA keys and vice versa, but can co-exist on the same server, allowing the server to handle both.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_rsa_signatures":  |  ["rsassa-pkcs1-v1_5-sha1", "rsassa-pkcs1-v1_5-sha256", "rsassa-pkcs1-v1_5-sha384", "rsassa-pkcs1-v1_5-sha512", "rsassa-pss-sha256", "rsassa-pss-sha384", "rsassa-pss-sha512"]  |  PSS is an improved version of PKCS.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allowed_ec_signatures":  |  ["ecdsa-p256-sha256", "ecdsa-p384-sha384", "ecdsa-p521-sha512", "eddsa", "ecdsa-p256k-sha256"]  |  See the links after this table for more info on these signature types.
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_types":  |  ["basic", "self", "attca", "ecdaa", "none"]  |  Determined by which "attestation_format" (see above) is chosen.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation_types":  |  ["basic", "self", "attca", "ecdaa", "none"]  |  Determined by which "attestation_formats" (see above) is chosen.
 "registration":  |  | Governs registration behavior.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"icon":  |
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation":  |  [**"none"**, "indirect", "direct"]<br><br>"none": Attestation statement does not matter to the RP web application.<br>"direct": RP web application uses attestation from the Authenticator.<br>"indirect": Client determines attestation statement; source may vary.  |  Determines acceptable sources from which the RP web application will receive the attestation statement (q.v. "attestation format").
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"attestation":  |  [**"none"**, "indirect", "direct"]<br><br>"none": Attestation statement does not matter to the RP web application.<br>"direct": RP web application uses attestation from the Authenticator.<br>"indirect": Client determines attestation statement; source may vary.  |  Determines acceptable sources from which the RP web application will receive the attestation statement (q.v. "attestation_formats").
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"displayName":  |  ["required", **"preferred"**]<br><br>"required": The RP web application will fail without the displayName.<br>"preferred": The RP web application prefers a displayName, but will not fail without one.  |  Describes the RP web application's requirements regarding user verification for the get() operation.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorSelection":  |  |  Is the Authenticator attached to a device, or portable?
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"authenticatorAttachment":  |  ["platform", "cross-platform"]&dagger;<br><br>"platform": Authenticator is built into a client device.<br>"cross-platform": Authenticator is portable between devices. Note that Bluetooth and NFC, used from a mobile device with built-in authentication, are considered cross-platform. |  Determines which type of Authenticator Attachment Modality the RP web application will accept.
@@ -221,7 +221,7 @@ The StrongKey FIDO2 Server is fully tested using Payara 4.1 web application serv
     
 4.  **Start the web server** and ensure that it has started successfully.
 
-Default ports differ by web server. Use this list of [common default web server ports](https://geekflare.com/default-port-numbers/) or consult the appropriate manuals. Open a web browser and type  **localhost:&lt;port-number&gt;** where &lt;port-number&gt; is the default port for your web server. If your web server must use another port, use that port instead. This opens the FIDO2 Server launch page.
+Default ports differ by web server. Use this list of [common default web server ports](https://geekflare.com/default-port-numbers/) or consult the appropriate manuals. Open a web browser and type **localhost:&lt;port-number&gt;** where &lt;port-number&gt; is the default port for your web server. If your web server must use another port, use that port instead. This opens the FIDO2 Server launch page.
 
 #### Create JDBC Resources
 
