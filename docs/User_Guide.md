@@ -29,30 +29,30 @@ The following _Application Programmer Interface (API)_ calls are the underpinnin
 ### Registration
 These calls uniquely register a user, and are required before any other calls can be used. Though it is not required to include a Relying Party (RP) web application in the chain of events, it provides a number of [security benefits](https://www.w3.org/TR/webauthn/#sctn-rp-benefits). Using these calls a user, a Relying Party web applicaton, and the user’s client (containing at least one Authenticator) work in concert to generate a public key credential and associate it with the user’s RP web application account. This requires a test of user presence or user verification. We strongly recommend including a Relying Party web application in your architecture.
 - **/fidokeys/registration/challenge**: This is always the first call made for any user, as it initiates the registration process by obtaining a single-use, cryptographically strong random number (nonce) from the FIDO2 Server via the RP web application. From the FIDO2 Server the nonce is then sent to the Authenticator for signing.
-  - [RP web application source: Challenge for new registration](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L81-L117)
-  - [RP web application source: Challenge to add Authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L119-L154)
+  - [RP web application source: Challenge for new registration](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
+  - [RP web application source: Challenge to add Authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
 - **/fidokeys**: This call submits a signed challenge (nonce) from the Authenticator to the FIDO2 Server via an RP web application, after which registration is complete and the user may log in. Upon success, the FIDO2 Authenticator public key is stored in the _skfs_ database.
-  - [RP web application source: Register a new user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L119-L154)
-  - [RP web application source: Adding Authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L156-L185)
-  - [WebAuthn client source: Pass RP registration challenge response to API](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js#L263-L296)
+  - [RP web application source: Register a new user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
+  - [RP web application source: Adding Authenticators to an existing user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
+  - [WebAuthn client source: Pass RP registration challenge response to API](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js)
 
 **NOTE**: Registering additional Authenticators to an existing user makes use of the same REST APIs as when used for first-time registration, but the logic must be adjusted accordingly.
 
 ### Authentication
 Authenticate a user using FIDO2 protocols. These calls mirror the registration calls in function. A user must be registered with at least one key before authentication calls can be made. In these calls the user and their client (containing at least one Authenticator) work together to cryptographically prove to an RP web application that the user controls the credential private key associated with a previously registered public key credential (see Registration, above). This requires a test of user presence or user verification, and will occur with every login attempt.
 - **/fidokeys/authentication/challenge**: Obtains a single-use, cryptographically strong random number (nonce) from the FIDO2 Server via the RP web application. From the FIDO2 Server the nonce is then sent to the Authenticator for signing.
-  - [RP web application source: Challenge for authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L187-L215)
+  - [RP web application source: Challenge for authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
 - **/fidokeys/authentication**: This call submits a signed challenge (nonce) from the Authenticator to the FIDO2 Server via RP web application, after which authentication is complete and the user is logged in.
-  - [RP web application source: Authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L217-L247)
-  - [WebAuthn client source: Pass RP authentication challenge response to API](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js#L298-L322)
+  - [RP web application source: Authentication](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
+  - [WebAuthn client source: Pass RP authentication challenge response to API](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js)
 
 ### Administration
 Admin calls are designed for managing registered Authenticators. **{kid}** is the unique ID of the Authenticator being manipulated. These calls require a user to be registered with at least one Authenticator, but not necessarily logged in (authenticated).
 - **/fidokeys (GET)**: Gets (via HTTP GET) all Authenticators associated with a registered user. Use this to generate lists and reports.
-  - [RP web application source: List Authenticators for a given user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L328-L356)
+  - [RP web application source: List Authenticators for a given user](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
 - **/fidokeys/{kid} (PATCH)**: Updates a registered Authenticator's status (_Active_ or _Inactive_).
 - **/fidokeys/{kid} (DELETE)**: Deletes a registered Authenticator. Note that deleting all Authenticators from a user (including yourself) will prevent further logins for that user. If this occurs, either the orphaned user will need to be deleted and re-registered or, if you have built it into your application, a means must be made available for re-registering an Authenticator to the user without logging the user out.
-  - [RP web application source: Delete Authenticators from an account](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java#L358-L404)
+  - [RP web application source: Delete Authenticators from an account](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
 
 ## Alternate Configurations
 StrongKey FIDO2 Server has only been tested using MariaDB (+JDBC), Payara, and Open JDK, but may work with other dependency applications. Following is a list of the component parts needed for StrongKey FIDO2 Server to function. All of the components may be installed on the same server, whether physical or virtual.
