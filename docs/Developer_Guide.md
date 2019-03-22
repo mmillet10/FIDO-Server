@@ -26,11 +26,11 @@ StrongKey's FIDO2 Server has only been tested against a very specific applicatio
 ## API Calls
 The following _Application Programmer Interface (API)_ calls are the underpinning pieces of the StrongKey FIDO2 Server. They pass the designated FIDO2 responses necessary to strongly authenticate a user with an appropriate Authenticator (see this list of [FIDO2-certified Authenticator vendors](https://fidoalliance.org/certification/fido-certified-products/)).
 
-### Registration
-These calls uniquely register a user, and are required before any other calls can be used. Though it is not required to include a Relying Party (RP) web application in the chain of events, it provides a number of [security benefits](https://www.w3.org/TR/webauthn/#sctn-rp-benefits). Using these calls a user, a Relying Party web applicaton, and the user’s client (containing at least one Authenticator) work in concert to generate a public key credential and associate it with the user’s RP web application account. This requires a test of user presence or user verification. We strongly recommend including a Relying Party web application in your architecture.
-
   - [RP web application source](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
   - [WebAuthn client source](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js)
+
+### Registration
+These calls uniquely register a user, and are required before any other calls can be used. Though it is not required to include a Relying Party (RP) web application in the chain of events, it provides a number of [security benefits](https://www.w3.org/TR/webauthn/#sctn-rp-benefits). Using these calls a user, a Relying Party web applicaton, and the user’s client (containing at least one Authenticator) work in concert to generate a public key credential and associate it with the user’s RP web application account. This requires a test of user presence or user verification. We strongly recommend including a Relying Party web application in your architecture.
 
 - **/fidokeys/challenge**: This is always the first call made for any user, as it initiates the registration process by obtaining a single-use, cryptographically strong random number (nonce) from the FIDO2 Server via the RP web application. From the FIDO2 Server the nonce is then sent to the Authenticator for signing.
 - **/fidokeys**: This call submits a signed challenge (nonce) from the Authenticator to the FIDO2 Server via an RP web application, after which registration is complete and the user may log in. Upon success, the FIDO2 Authenticator public key is stored in the _skfs_ database.
