@@ -26,6 +26,8 @@ StrongKey's FIDO2 Server has only been tested against a very specific applicatio
 ## API Calls
 The following _Application Programmer Interface (API)_ calls are the underpinning pieces of the StrongKey FIDO2 Server. They pass the designated FIDO2 responses necessary to strongly authenticate a user with an appropriate Authenticator (see this list of [FIDO2-certified Authenticator vendors](https://fidoalliance.org/certification/fido-certified-products/)).
 
+Following is the main source code for the Relying Party web application and the WebAuthn client:
+
   - [RP web application source](https://github.com/StrongKey/relying-party-java/blob/master/webauthntutorial/src/main/java/com/strongkey/webauthntutorial/WebauthnService.java)
   - [WebAuthn client source](https://github.com/StrongKey/WebAuthn/blob/master/dist/js/fido2demo.js)
 
