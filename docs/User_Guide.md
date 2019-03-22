@@ -19,7 +19,7 @@
 * [Removing StrongKey FIDO2 Server and Its Components](https://github.com/khedrond/FIDO-Server/blob/master/docs/Developer_Guide.md#removing-the-strongkey-fido2-server-and-its-components)
 
 ## Overview
-So you've installed StrongKey's FIDO2 Server and decided to delve deeper into its internal workings. This User Guide will shepherd you through the fine points of configuring and permutating the necessary components to make our FIDO Server more customized to suit your needs.
+So you've installed StrongKey's FIDO2 Server and decided to delve deeper into its internal workings. This guide will shepherd you through the fine points of configuring and permutating the necessary components to make our FIDO Server more customized to suit your needs.
 
 StrongKey's FIDO2 Server has only been tested against a very specific application stack, but should be adaptable to other applications of similar function. This document briefly touches on the necessary API calls, then goes through a vendor-inspecific installation using generic settings and commands. Each section offers options and code samples for the various components.
 
