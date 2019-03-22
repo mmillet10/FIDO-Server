@@ -1,22 +1,22 @@
 
 
-# StrongKey FIDO2 Server User Guide
+# StrongKey FIDO2 Server Developer Guide
 ## Contents
 
-* [Overview](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#overview)
-* [API Calls](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#api-calls)
-  * [Registration](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#registration)
-  * [Authentication](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#authentication)
-  * [Administration](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#administration)
-* [Alternate Configurations](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#alternate-configurations)
-  * [Options with StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#options-with-strongkey-fido2-server)
-    * [Policies and Their Use](https://github.com/khedrond/FIDO-Server/blob/master/docs/User_Guide.md#policies-and-their-use)
-  * [Options for the Database Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#options-for-the-database-server)
-    * [Database Schema for StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#database-schema-for-strongkey-fido2-server)
-  * [Java Web Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#java-web-server)
-    * [Create JDBC Resources](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#create-jdbc-resources)
-* [Deploy StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#deploy-strongkey-fido2-server)
-* [Removing StrongKey FIDO2 Server and Its Components](https://github.com/khedrond/FIDO-Server/blob/master/docs/User_Guide.md#removing-the-strongkey-fido2-server-and-its-components)
+* [Overview](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#overview)
+* [API Calls](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#api-calls)
+  * [Registration](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#registration)
+  * [Authentication](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#authentication)
+  * [Administration](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#administration)
+* [Alternate Configurations](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#alternate-configurations)
+  * [Options with StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#options-with-strongkey-fido2-server)
+    * [Policies and Their Use](https://github.com/khedrond/FIDO-Server/blob/master/docs/Developer_Guide.md#policies-and-their-use)
+  * [Options for the Database Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#options-for-the-database-server)
+    * [Database Schema for StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#database-schema-for-strongkey-fido2-server)
+  * [Java Web Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#java-web-server)
+    * [Create JDBC Resources](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#create-jdbc-resources)
+* [Deploy StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#deploy-strongkey-fido2-server)
+* [Removing StrongKey FIDO2 Server and Its Components](https://github.com/khedrond/FIDO-Server/blob/master/docs/Developer_Guide.md#removing-the-strongkey-fido2-server-and-its-components)
 
 ## Overview
 So you've installed StrongKey's FIDO2 Server and decided to delve deeper into its internal workings. This User Guide will shepherd you through the fine points of configuring and permutating the necessary components to make our FIDO Server more customized to suit your needs.
@@ -122,7 +122,7 @@ The included default policy enables all supported configuration choices for Stro
       
        select policy from fido_policies where sid=1;
    
-   See Step 6 of [Database Schema for StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/User_Guide.md#database-schema-for-strongkey-fido2-server)," below, for an example of what the entry looks like in the _fido_policies_ table. Make a note of 
+   See Step 6 of [Database Schema for StrongKey FIDO2 Server](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Developer_Guide.md#database-schema-for-strongkey-fido2-server)," below, for an example of what the entry looks like in the _fido_policies_ table. Make a note of 
 2. Copy the encoded text entry from there and [decode it using the base64urlsafe](https://www.google.com/search?q=base64urlsafe+decoder) algorithm.
 3. Edit the file, making changes according to the options in table above.
 4. If changes have been made, save it as a text file.
